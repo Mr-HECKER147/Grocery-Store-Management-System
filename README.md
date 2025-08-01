@@ -5,7 +5,7 @@ Requirements:  Flask(Python),  HTML, CSS, JS,  MySQL,  pymysql(library,installed
 
 For SQL,needs a MySQL server and MySQL workbench, db.py will automatically create the database(schema) and the required tables so you dont have to.
 
-
+Please feel free to give me suggestions or your reviews...maybe in the issues tab
 
 
   
