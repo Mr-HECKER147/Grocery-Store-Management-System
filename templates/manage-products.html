@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GSMS - Manage Products</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="page-header">
+        <h2><i class="fas fa-box"></i> Manage Products</h2>
+        <p class="text-muted">Add, edit, and manage your product inventory</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="mb-3">
+        <a href="/" class="btn btn-default">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal">
+            <i class="fas fa-plus"></i> Add Product
+        </button>
+        <button class="btn btn-info" onclick="productManager.fetchProducts()">
+            <i class="fas fa-refresh"></i> Refresh
+        </button>
+    </div>
+
+    <!-- Products Table -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4><i class="fas fa-list"></i> Product Inventory</h4>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-tag"></i> Product Name</th>
+                            <th><i class="fas fa-balance-scale"></i> Unit</th>
+                            <th><i class="fas fa-rupee-sign"></i> Price</th>
+                            <th><i class="fas fa-warehouse"></i> Stock</th>
+                            <th><i class="fas fa-cogs"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <i class="fas fa-spinner fa-spin"></i> Loading products...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Modal (Add/Edit) -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"><i class="fas fa-plus"></i> Add Product</h4>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId" value="0">
+                    
+                    <div class="form-group">
+                        <label for="name">
+                            <i class="fas fa-tag"></i> Product Name *
+                        </label>
+                        <input type="text" id="name" class="form-control" 
+                               placeholder="Enter product name" required maxlength="255">
+                        <small class="text-muted">Only letters, numbers, spaces, hyphens, and underscores allowed</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="uoms">
+                            <i class="fas fa-balance-scale"></i> Unit of Measurement *
+                        </label>
+                        <select id="uoms" class="form-control" required>
+                            <option value="">-- Select Unit --</option>
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="grams">Grams (g)</option>
+                            <option value="litre">Litre (L)</option>
+                            <option value="ml">Millilitre (ml)</option>
+                            <option value="piece">Piece</option>
+                        </select>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="price">
+                                    <i class="fas fa-rupee-sign"></i> Price per Unit *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">₹</span>
+                                    <input type="number" id="price" class="form-control" 
+                                           placeholder="0.00" step="0.01" min="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="stock">
+                                    <i class="fas fa-warehouse"></i> Initial Stock
+                                </label>
+                                <input type="number" id="stock" class="form-control" 
+                                       placeholder="0" min="0" value="0">
+                                <small class="text-muted">Number of units in stock</small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="saveProduct">
+                    <i class="fas fa-save"></i> Add Product
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> Confirm Delete
+                </h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this product?</p>
+                <p class="text-muted"><small>This action cannot be undone.</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+<script src="/static/manage-products.js"></script>
+</body>
+</html>
