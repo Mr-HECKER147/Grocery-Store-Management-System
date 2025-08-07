@@ -538,3 +538,23 @@ body {
   background-color: #f0ad4e;
   border-left: 4px;
 }
+
+/* Global Footer */
+.site-footer {
+  background-color: #000;
+  color: #000000;
+  padding: 30px 0;
+  text-align: center;
+  font-size: 14px;
+  margin-top: 50px;
+}
+
+.site-footer a {
+  color: #0063f8;
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #0026fc;
+  text-decoration: underline;
+}
