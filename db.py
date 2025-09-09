@@ -7,11 +7,11 @@ logger = logging.getLogger(__name__)
 
 # Database configuration - use environment variables in production
 MYSQL_CONFIG = {
-    'host': os.environ.get('MYSQL_HOST', 'localhost'),
-    'port': int(os.environ.get('MYSQL_PORT', 3306)),
+    'host': os.environ.get('MYSQL_HOST','localhost'),
+    'port': int(os.environ.get('MYSQL_PORT','3306')),
     'user': os.environ.get('MYSQL_USER', 'root'),
-    'password': os.environ.get('MYSQL_PASSWORD', 'UPJMySQL_123'),
-    'database': os.environ.get('MYSQL_DATABASE', 'grocery_db'),
+    'password': os.environ.get('MYSQL_PASSWORD'),
+    'database': os.environ.get('MYSQL_DATABASE','grocery_db'),
     'charset': 'utf8mb4',
     'autocommit': False
 }
@@ -202,4 +202,5 @@ def get_low_stock_products(threshold=10):
 if __name__ == "__main__":
     # Test database initialization
     init_db()
+
     print("Database initialization test completed successfully!")
